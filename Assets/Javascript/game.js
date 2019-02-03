@@ -19,7 +19,7 @@ var wordArray;
 var solved = [];
 //var letter;
 
-var word;
+var selectedWord;
 
 
 
@@ -38,12 +38,11 @@ playButton.onclick = function () {
     var newGame = new Game(pickedWord);
     console.log("Game object created");
     console.log(newGame);
+    wordArray = pickedWord.split("");
+    for (var i = 0; i < wordArray.length; i++) {
+        solved[i] = "_";
 
-    
-
-
-
-
+    }
 
 
 
@@ -51,88 +50,53 @@ playButton.onclick = function () {
 
     document.onkeyup = function (event) //event to register keystrokes
     {
-        console.log(event.key)
+
         letter = event.key.toLowerCase();
         lettersGuessed.push(letter);
         guessesRemaining--
 
 
         document.getElementById("guessed").innerHTML = " " + lettersGuessed;
-        newGame.splitWord(pickedWord);
-        newGame.compareKeys(pickedWord, event.key);
-        newGame.unsolved(wordArray);
-        console.log(letter);
+        newGame.compareKeys(pickedWord, letter);
 
 
+        selectedWord = solved.join(" ");
+        document.getElementById("solvedWord").innerHTML = solved.join(" ");
 
+        console.log("onkey event");
     }
-
-
-
 };
-
-
-
 
 
 function Game(currentWord) {
     this.word = currentWord;
+    console.log("game");
 
 
 
-
-    this.splitWord = function (currentWord) {
-
+    this.compareKeys = function (currentWord, currentLetter) {
         this.word = currentWord;
-        var wordArray = currentWord.split("");
+        var newLetter = currentLetter;
+        console.log("comparekeys");
 
-
-
-
-        console.log(wordArray);
-    };
-
-    this.unsolved = function (wordArray) {
-        for (var i = 0; i < wordArray.length; i++) {
-            solved[i] = "_";
-        }
-
-        // putting in a string
-        word = solved.join(" ");
-        console.log(solved);
-        document.getElementById("solvedWord").innerHTML = word;
-        console.log(word);
-    };
-
-    this.compareKeys = function (currentWord, letter) {
-        this.word = currentWord;
-        wordArray = currentWord.split("");
-        var newLetter = letter;
 
         for (var i = 0; i < wordArray.length; i++) {
             if (wordArray[i] === newLetter) {
                 solved[i] = newLetter;
-                document.getElementById("warning").innerHTML = "Gotchya";
-            }
-            else {
-                document.getElementById("warning").innerHTML = "No, this isn't it.";
-                
             }
         }
-        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
-        document.getElementById("solvedWord").innerHTML = solved.join(" ");
-        console.log(solved);
 
-
-
-    };
-
-    
-
-
-
+document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
+};
 
 }
+
+
+
+
+
+
+
 
 
 /*

@@ -23,6 +23,8 @@ var selectedWord;
 
 
 
+
+
 //var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
 
@@ -33,37 +35,69 @@ var playButton = document.getElementById("play");
 
 
 
-playButton.onclick = function () {
-    gameStarted = true;
-    var newGame = new Game(pickedWord);
-    console.log("Game object created");
-    console.log(newGame);
+onload = function () {
+
+    pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
     wordArray = pickedWord.split("");
     for (var i = 0; i < wordArray.length; i++) {
         solved[i] = "_";
+
+        selectedWord = solved.join(" ");
+        document.getElementById("solvedWord").innerHTML = solved.join(" ");
 
     }
 
 
 
 
+}
+
+//document.onkeyup = game.keyup;
+
+//game.start outside
+
+//create event.keyup in game object
+
+//pickedWord can be created in the game object?
+
+//workInProgress Submitting what I have to edit later.
+
+//Put as much into the game object as possible. 
+
+
+
+playButton.onclick = function () {
+
+
+    gameStarted = true;
+    var newGame = new Game(pickedWord);
+    console.log("Game object created");
+    console.log(newGame);
 
     document.onkeyup = function (event) //event to register keystrokes
     {
 
         letter = event.key.toLowerCase();
         lettersGuessed.push(letter);
-        guessesRemaining--
+        guessesRemaining--;
+
+        if (guessesRemaining >= 0) {
+            newGame.compareKeys(pickedWord, letter);
+        }
+        else if (guessesRemaining === 0) {
+            onload();
+            lettersGuessed = [];
+        }
+        else if (solved.length = 6) {
+            onload();
+            lettersGuessed = [];
+
+        }
+        else {
+
+        }
 
 
-        document.getElementById("guessed").innerHTML = " " + lettersGuessed;
-        newGame.compareKeys(pickedWord, letter);
-
-
-        selectedWord = solved.join(" ");
-        document.getElementById("solvedWord").innerHTML = solved.join(" ");
-
-        console.log("onkey event");
     }
 };
 
@@ -71,6 +105,7 @@ playButton.onclick = function () {
 function Game(currentWord) {
     this.word = currentWord;
     console.log("game");
+
 
 
 
@@ -85,11 +120,24 @@ function Game(currentWord) {
                 solved[i] = newLetter;
             }
         }
+        document.getElementById("guessed").innerHTML = " " + lettersGuessed;
 
-document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
-};
+
+
+
+
+
+        selectedWord = solved.join(" ");
+        document.getElementById("solvedWord").innerHTML = solved.join(" ");
+
+
+
+
+        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
+    };
 
 }
+
 
 
 

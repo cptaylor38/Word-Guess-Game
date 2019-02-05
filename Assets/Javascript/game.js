@@ -1,25 +1,16 @@
-var lettersGuessed = []; //creating array to store the letters already input 
-
-var wins = 0; //number of times user guessed word correctly
-
-var guessesRemaining = 12; //number of guesses - reduced inside game function
-
-//establishing global variable that can be used throughout the objects and the onkey event
-
 var gameObjectArray = ["secure", "access", "engage", "bypass", "finish"];
-//var lettersInWord = [];
+
 
 var pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
 
-//var newGame;
+
 
 var gameStarted = false;
 
-var wordArray;
-var solved = [];
-//var letter;
 
-var selectedWord;
+
+
+
 
 
 
@@ -31,6 +22,163 @@ var selectedWord;
 
 
 var playButton = document.getElementById("play");
+
+
+
+
+
+
+
+
+
+
+
+
+
+playButton.onclick = function () {
+    gameStarted = true;
+    newGame = new Game(pickedWord);
+    console.log("Game object created");
+    console.log(newGame);
+    document.onkeyup = newGame.keyup;
+
+
+
+
+    newGame.start();
+    newGame.play();
+
+
+
+}
+
+
+function Game(currentWord) {
+    this.word = currentWord;
+    console.log("game");
+    var letter;
+    wordArray = currentWord.split("");
+    var solved = [];
+    var lettersGuessed = [];
+    var wins = 0;
+    var guessesRemaining;
+    var wordArray;
+    //var selectedWord;
+
+
+
+
+    this.start = function () {
+        pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
+        wordArray = pickedWord.split("");
+        guessesRemaining = 12;
+
+        for (var i = 0; i < wordArray.length; i++) {
+            solved[i] = "_";
+
+            selectedWord = solved.join(" ");
+            document.getElementById("solvedWord").innerHTML = solved.join(" ");
+
+        }
+
+        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
+
+        this.play();
+
+    }
+
+
+
+    this.keyup = function () //event to register keystrokes
+    {
+        var game = this;
+        letter = event.key.toLowerCase();
+        lettersGuessed.push(letter);
+        guessesRemaining--
+
+        console.log(letter);
+
+
+
+
+
+
+
+    }
+
+    this.play = function () {
+
+        console.log("playing");
+
+        for (i = 0; i < lettersGuessed.length; i++) {
+            if (lettersGuessed[i] !== letter) {
+                document.getElementById("guessed").innerHTML = " " + lettersGuessed;
+            }
+        }
+
+        if (guessesRemaining >= 0) {
+            this.compareKeys(currentWord, letter);
+        }
+        else if (guessesRemaining === 0) {
+            this.start();
+            lettersGuessed = [];
+        }
+        else if (solved.length = 6) {
+            this.start();
+            lettersGuessed = [];
+        }
+        else {
+
+        }
+
+    }
+
+    this.compareKeys = function () {
+
+
+        console.log("comparekeys");
+
+
+        for (var i = 0; i < wordArray.length; i++) {
+            if (wordArray[i] === letter) {
+                solved[i] = letter;
+            }
+        }
+        selectedWord = solved.join(" ");
+        document.getElementById("solvedWord").innerHTML = solved.join(" ");
+        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 
 
@@ -62,7 +210,7 @@ onload = function () {
 
 //workInProgress Submitting what I have to edit later.
 
-//Put as much into the game object as possible. 
+//Put as much into the game object as possible.
 
 
 

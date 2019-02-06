@@ -4,39 +4,48 @@ var game = {  //realized i was using ; instead of , for all of the properities w
     guessesRemaining: 12, //number of guesses - reduced inside game function
     gameObjectArray: ["secure", "access", "engage", "bypass", "finish"],
     pickedWord: '',
-    gameStarted: false,
     wordArray: [],
     solved: [],
     selectedWord: '',
     currentWord: '',
+    correctGuesses: 0,
 
     init: function () {
         var self = this;
         var guessesRemaining = self.guessesRemaining;
+
+
+
+        console.log("init f");
+
+
         document.onkeyup = function (event) {   //onkey event
             guessesRemaining--;
-            self.handleLetter(event.key.toLowerCase(), guessesRemaining); //passing onkey event - event - to handleLetter function
+            self.handleLetter(event.key.toLowerCase(), guessesRemaining);
+
+
+
+            //passing onkey event - event - to handleLetter function
 
         }
         document.getElementById('play').onclick = function () {  //calling play function at play button onclick event
-            self.gameStarted = true;
             self.handlePlay();
+
         }
-        console.log("init f");
+
+
+
+
+
+
     },
 
     handleLetter: function (letter, guessesRemaining) {
         console.log(letter);
+        console.log("handleLetter f");
+        //
         var self = this;
         self.gameStatus(letter, guessesRemaining);
-
-        console.log("handleLetter f");
-
-        //self.compareKeys(letter, guessesRemaining);
-        /*var usedLetters = self.lettersGuessed;
-        var guessesLeft = self.guessesRemaining;
-        var currentLetter = letter;*/
-
 
 
 
@@ -45,10 +54,15 @@ var game = {  //realized i was using ; instead of , for all of the properities w
     handlePlay: function () {
         var self = this;
         console.log('play f');
+
+
         this.pickedWord = this.gameObjectArray[Math.floor(Math.random() * this.gameObjectArray.length)];  // or something like this
         self.lettersGuessed = [];
-        self.onload();
+
         document.getElementById("guessed").innerHTML = " ";
+
+
+        self.onload();
 
     },
 
@@ -56,6 +70,7 @@ var game = {  //realized i was using ; instead of , for all of the properities w
         var self = this;
         var currentWord = self.pickedWord;
         var solved = self.solved;
+
         // pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
         wordArray = self.pickedWord.split("");
         for (var i = 0; i < wordArray.length; i++) {
@@ -64,10 +79,14 @@ var game = {  //realized i was using ; instead of , for all of the properities w
             document.getElementById("solvedWord").innerHTML = solved.join(" ");
         }
         console.log(currentWord);
-        if (!self.gameStarted) {
+        if (gameStarted = true) {
             self.init();
         }
+        else {
+            console.log("something");
+        }
         console.log("onload f");
+
 
     },
 
@@ -80,14 +99,22 @@ var game = {  //realized i was using ; instead of , for all of the properities w
         var splitWord = wordArray;
 
 
+
+
+
         for (var i = 0; i < splitWord.length; i++) {
             if (splitWord[i] === newLetter) {
                 solved[i] = newLetter;
+
+
+
             }
             else {
                 console.log("need to fix this");
             }
         };
+
+
 
         document.getElementById("guessed").innerHTML = " " + lettersUsed;
 
@@ -95,21 +122,40 @@ var game = {  //realized i was using ; instead of , for all of the properities w
         document.getElementById("solvedWord").innerHTML = solved.join(" ");
         document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
         console.log("compareKeys f");
+
+
+
+
+
     },
 
     gameStatus: function (letter, guessesRemaining) {
         console.log("gameStatus f");
+
         var self = this;
         var lettersGuessed = self.lettersGuessed;
-        if (guessesRemaining >= 0) {
+        pickedWord = self.pickedWord;
+        wordArray = pickedWord.split("");
+
+
+
+        if (guessesRemaining > -1) {
             self.compareKeys(letter, guessesRemaining);
             lettersGuessed.push(letter);
+
         }
-        else {
-            self.gameStarted = false;
+        else if (guessesRemaining = 0) {
+
             self.handlePlay();
         }
+        else {
+            console.log("what now");
+        };
+
+
     }
+
+
 }
 
 game.init();

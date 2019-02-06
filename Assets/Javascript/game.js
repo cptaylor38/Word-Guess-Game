@@ -12,44 +12,44 @@ var game = {  //realized i was using ; instead of , for all of the properities w
 
     init: function () {
         var self = this;
+        var guessesRemaining = self.guessesRemaining;
         document.onkeyup = function (event) {   //onkey event
-            self.handleLetter(event.key.toLowerCase()); //passing onkey event - event - to handleLetter function
+            guessesRemaining--;
+            self.handleLetter(event.key.toLowerCase(), guessesRemaining); //passing onkey event - event - to handleLetter function
+
         }
         document.getElementById('play').onclick = function () {  //calling play function at play button onclick event
+            self.gameStarted = true;
             self.handlePlay();
         }
+        console.log("init f");
     },
 
-    handleLetter: function (letter) {
+    handleLetter: function (letter, guessesRemaining) {
         console.log(letter);
         var self = this;
-        var usedLetters = self.lettersGuessed;
+        self.gameStatus(letter, guessesRemaining);
+
+        console.log("handleLetter f");
+
+        //self.compareKeys(letter, guessesRemaining);
+        /*var usedLetters = self.lettersGuessed;
         var guessesLeft = self.guessesRemaining;
-        var currentLetter = letter;
-        usedLetters.push(currentLetter);
-        guessesLeft--;
+        var currentLetter = letter;*/
 
-        if (guessesLeft >= 0) {
-            self.compareKeys(currentLetter);
-        }
-        else if (guessesLeft === 0) {
-            onload();
-            usedLetters = [];
-        } else if (solved.length = 6) {
-            onload();
-            usedLetters = [];
 
-        } else {
 
-        }
+
     },
 
     handlePlay: function () {
         var self = this;
-        console.log('play');
+        console.log('play f');
         this.pickedWord = this.gameObjectArray[Math.floor(Math.random() * this.gameObjectArray.length)];  // or something like this
-
+        self.lettersGuessed = [];
         self.onload();
+        document.getElementById("guessed").innerHTML = " ";
+
     },
 
     onload: function () {
@@ -64,16 +64,21 @@ var game = {  //realized i was using ; instead of , for all of the properities w
             document.getElementById("solvedWord").innerHTML = solved.join(" ");
         }
         console.log(currentWord);
+        if (!self.gameStarted) {
+            self.init();
+        }
+        console.log("onload f");
+
     },
 
-    compareKeys: function (currentLetter) {
+    compareKeys: function (currentLetter, guessesRemaining) {
         var self = this;
         var newLetter = currentLetter;
         var solved = self.solved;
-        var lettersUsed = this.lettersGuessed;
+        var lettersUsed = self.lettersGuessed;
         // wordArray = currentWord.split("");
         var splitWord = wordArray;
-        var guessesLeft = this.guessesRemaining;
+
 
         for (var i = 0; i < splitWord.length; i++) {
             if (splitWord[i] === newLetter) {
@@ -82,13 +87,28 @@ var game = {  //realized i was using ; instead of , for all of the properities w
             else {
                 console.log("need to fix this");
             }
-        }
+        };
 
         document.getElementById("guessed").innerHTML = " " + lettersUsed;
 
         selectedWord = solved.join(" ");
         document.getElementById("solvedWord").innerHTML = solved.join(" ");
-        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesLeft;
+        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
+        console.log("compareKeys f");
+    },
+
+    gameStatus: function (letter, guessesRemaining) {
+        console.log("gameStatus f");
+        var self = this;
+        var lettersGuessed = self.lettersGuessed;
+        if (guessesRemaining >= 0) {
+            self.compareKeys(letter, guessesRemaining);
+            lettersGuessed.push(letter);
+        }
+        else {
+            self.gameStarted = false;
+            self.handlePlay();
+        }
     }
 }
 

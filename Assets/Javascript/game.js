@@ -1,333 +1,95 @@
-var gameObjectArray = ["secure", "access", "engage", "bypass", "finish"];
+var game = {  //realized i was using ; instead of , for all of the properities within this object.
+    lettersGuessed: [], //creating array to store the letters already input 
+    wins: 0, //number of times user guessed word correctly
+    guessesRemaining: 12, //number of guesses - reduced inside game function
+    gameObjectArray: ["secure", "access", "engage", "bypass", "finish"],
+    pickedWord: '',
+    gameStarted: false,
+    wordArray: [],
+    solved: [],
+    selectedWord: '',
+    currentWord: '',
 
+    init: function () {
+        var self = this;
+        document.onkeyup = function (event) {   //onkey event
+            self.handleLetter(event.key.toLowerCase()); //passing onkey event - event - to handleLetter function
+        }
+        document.getElementById('play').onclick = function () {  //calling play function at play button onclick event
+            self.handlePlay();
+        }
+    },
 
-var pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
+    handleLetter: function (letter) {
+        console.log(letter);
+        var self = this;
+        var usedLetters = self.lettersGuessed;
+        var guessesLeft = self.guessesRemaining;
+        var currentLetter = letter;
+        usedLetters.push(currentLetter);
+        guessesLeft--;
 
+        if (guessesLeft >= 0) {
+            self.compareKeys(currentLetter);
+        }
+        else if (guessesLeft === 0) {
+            onload();
+            usedLetters = [];
+        } else if (solved.length = 6) {
+            onload();
+            usedLetters = [];
 
+        } else {
 
-var gameStarted = false;
+        }
+    },
 
+    handlePlay: function () {
+        var self = this;
+        console.log('play');
+        this.pickedWord = this.gameObjectArray[Math.floor(Math.random() * this.gameObjectArray.length)];  // or something like this
 
+        self.onload();
+    },
 
-
-
-
-
-
-
-
-//var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-
-
-
-
-var playButton = document.getElementById("play");
-
-
-
-
-
-
-
-
-
-
-
-
-
-playButton.onclick = function () {
-    gameStarted = true;
-    newGame = new Game(pickedWord);
-    console.log("Game object created");
-    console.log(newGame);
-    document.onkeyup = newGame.keyup;
-
-
-
-
-    newGame.start();
-    newGame.play();
-
-
-
-}
-
-
-function Game(currentWord) {
-    this.word = currentWord;
-    console.log("game");
-    var letter;
-    wordArray = currentWord.split("");
-    var solved = [];
-    var lettersGuessed = [];
-    var wins = 0;
-    var guessesRemaining;
-    var wordArray;
-    //var selectedWord;
-
-
-
-
-    this.start = function () {
-        pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
-        wordArray = pickedWord.split("");
-        guessesRemaining = 12;
-
+    onload: function () {
+        var self = this;
+        var currentWord = self.pickedWord;
+        var solved = self.solved;
+        // pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
+        wordArray = self.pickedWord.split("");
         for (var i = 0; i < wordArray.length; i++) {
             solved[i] = "_";
-
             selectedWord = solved.join(" ");
             document.getElementById("solvedWord").innerHTML = solved.join(" ");
-
         }
-
-        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
-
-        this.play();
-
-    }
-
-
-
-    this.keyup = function () //event to register keystrokes
-    {
-        var game = this;
-        letter = event.key.toLowerCase();
-        lettersGuessed.push(letter);
-        guessesRemaining--
-
-        console.log(letter);
-
-
-
-
-
-
-
-    }
-
-    this.play = function () {
-
-        console.log("playing");
-
-        for (i = 0; i < lettersGuessed.length; i++) {
-            if (lettersGuessed[i] !== letter) {
-                document.getElementById("guessed").innerHTML = " " + lettersGuessed;
-            }
-        }
-
-        if (guessesRemaining >= 0) {
-            this.compareKeys(currentWord, letter);
-        }
-        else if (guessesRemaining === 0) {
-            this.start();
-            lettersGuessed = [];
-        }
-        else if (solved.length = 6) {
-            this.start();
-            lettersGuessed = [];
-        }
-        else {
-
-        }
-
-    }
-
-    this.compareKeys = function () {
-
-
-        console.log("comparekeys");
-
-
-        for (var i = 0; i < wordArray.length; i++) {
-            if (wordArray[i] === letter) {
-                solved[i] = letter;
-            }
-        }
-        selectedWord = solved.join(" ");
-        document.getElementById("solvedWord").innerHTML = solved.join(" ");
-        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-onload = function () {
-
-    pickedWord = gameObjectArray[Math.floor(Math.random() * gameObjectArray.length)];
-    wordArray = pickedWord.split("");
-    for (var i = 0; i < wordArray.length; i++) {
-        solved[i] = "_";
-
-        selectedWord = solved.join(" ");
-        document.getElementById("solvedWord").innerHTML = solved.join(" ");
-
-    }
-
-
-
-
-}
-
-//document.onkeyup = game.keyup;
-
-//game.start outside
-
-//create event.keyup in game object
-
-//pickedWord can be created in the game object?
-
-//workInProgress Submitting what I have to edit later.
-
-//Put as much into the game object as possible.
-
-
-
-playButton.onclick = function () {
-
-
-    gameStarted = true;
-    var newGame = new Game(pickedWord);
-    console.log("Game object created");
-    console.log(newGame);
-
-    document.onkeyup = function (event) //event to register keystrokes
-    {
-
-        letter = event.key.toLowerCase();
-        lettersGuessed.push(letter);
-        guessesRemaining--;
-
-        if (guessesRemaining >= 0) {
-            newGame.compareKeys(pickedWord, letter);
-        }
-        else if (guessesRemaining === 0) {
-            onload();
-            lettersGuessed = [];
-        }
-        else if (solved.length = 6) {
-            onload();
-            lettersGuessed = [];
-
-        }
-        else {
-
-        }
-
-
-    }
-};
-
-
-function Game(currentWord) {
-    this.word = currentWord;
-    console.log("game");
-
-
-
-
-    this.compareKeys = function (currentWord, currentLetter) {
-        this.word = currentWord;
+        console.log(currentWord);
+    },
+
+    compareKeys: function (currentLetter) {
+        var self = this;
         var newLetter = currentLetter;
-        console.log("comparekeys");
+        var solved = self.solved;
+        var lettersUsed = this.lettersGuessed;
+        // wordArray = currentWord.split("");
+        var splitWord = wordArray;
+        var guessesLeft = this.guessesRemaining;
 
-
-        for (var i = 0; i < wordArray.length; i++) {
-            if (wordArray[i] === newLetter) {
+        for (var i = 0; i < splitWord.length; i++) {
+            if (splitWord[i] === newLetter) {
                 solved[i] = newLetter;
             }
+            else {
+                console.log("need to fix this");
+            }
         }
-        document.getElementById("guessed").innerHTML = " " + lettersGuessed;
 
-
-
-
-
+        document.getElementById("guessed").innerHTML = " " + lettersUsed;
 
         selectedWord = solved.join(" ");
         document.getElementById("solvedWord").innerHTML = solved.join(" ");
-
-
-
-
-        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesRemaining;
-    };
-
+        document.getElementById("attempts").innerHTML = "Attempts remaining until shutdown: " + guessesLeft;
+    }
 }
 
-
-
-
-
-
-
-
-
-
-/*
-    for (i = 0; i < alphabet.length; i++) {
-        var btn = document.createElement("BUTTON");
-        btn.innerHTML = " " + alphabet[i];
-        console.log(btn);
-        var keyboard = document.getElementById("keyboard");
-        keyboard.appendChild(btn);
-
-
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-
-//need button function "Play" to start game & choose a word.
-
-
-
-
-
-
-
-
-
-
-
-
-
+game.init();
